@@ -1,13 +1,14 @@
 /**
  * Validate form and attach active validation to elements
  * @param {Object} options
- * @param {String} containerElement Selector for containing element.
- * @param {String} validationClass jQuery selector, which class for elements to be validated.
- * @param {String} errorClass Class to attach when match isn't found.
- * @param {Object} matchedElements Holds all matched elements.
- * @param {Number} invalidCount Holds the count for amount of invalid elements.
- * @param {Array} invalidElements Array of all invalid elements.
- * @param {Bool} isValid Determines if the form is valid or not.
+ * @param {string} options.containerElement Selector for containing element.
+ * @param {string} options.validationClass jQuery selector, which class for elements to be validated.
+ * @param {string} options.errorClass Class to attach when match isn't found.
+ * @param {string} options.errorMsg Error message.
+ * @param {Object} options.matchedElements Holds all matched elements.
+ * @param {number} options.invalidCount Holds the count for amount of invalid elements.
+ * @param {Array} options.invalidElements Array of all invalid elements.
+ * @param {boolean} options.isValid Determines if the form is valid or not.
  */
 var FormValidation = function (options) {		
     this.containerElement = options.containerElement;
@@ -37,11 +38,7 @@ FormValidation.prototype = {
    isValidElement: function (element) {
         //We can check element.val,as "",0, NULL, or undefined, will be falsy.
         this.checkType(element);
-        if (element.val()) {
-            this.checkType(element);
-        } else if (!element.val()) {
-            this.showError(element);
-        }
+
     },
     checkType: function (element) {
         //console.log('element type', element.attr("type"));
@@ -51,11 +48,12 @@ FormValidation.prototype = {
         }
     },    
     isValidEmail: function (element) {
-        var isMatched = element.val().match(element.val(), /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        if (!isMatched[0]) {
-            this.showError(element, "Invalid Email");
-        } else if (isMatched[0]) {
-            this.removeError(element);
+        //Removed Regex after reading http://davidcel.is/blog/2012/09/06/stop-validating-email-addresses-with-regex/
+            this.showError(element, "Enter Email Address.");        
+    },
+    isValidText: function (element) {        
+        if(element.val() == ""){
+            this.showError(element, "Fill out text.");        
         }
     },
     showError: function (element, customMessage) {
